@@ -45,6 +45,10 @@ class OrderItem(BaseModel):
     price: float
     quantity: int
 
+class PaymentInfo(BaseModel):
+    cardLast4: str
+    cardholderName: str
+
 class Order(BaseModel):
     model_config = ConfigDict(extra="ignore")
     
@@ -58,6 +62,7 @@ class Order(BaseModel):
     country: str
     items: List[OrderItem]
     total: float
+    paymentInfo: Optional[PaymentInfo] = None
     status: str = "pending"
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -72,6 +77,7 @@ class OrderCreate(BaseModel):
     country: str
     items: List[OrderItem]
     total: float
+    paymentInfo: Optional[PaymentInfo] = None
 
 class OrderUpdate(BaseModel):
     status: str

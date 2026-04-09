@@ -72,14 +72,7 @@ const ProductDetailPage = () => {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <div className="flex items-center gap-3">
-                <img 
-                  src="https://w7.pngwing.com/pngs/45/625/png-transparent-yellow-logo-illustration-walmart-logo-grocery-store-retail-asda-stores-limited-icon-walmart-logo-miscellaneous-company-orange.png"
-                  alt="Walmart Logo"
-                  className="h-6 w-6 object-contain"
-                />
-                <h1 className="text-xl font-bold">Walmart</h1>
-              </div>
+              <h1 className="text-xl font-bold">Walmart</h1>
             </div>
             <Button
               variant="ghost"

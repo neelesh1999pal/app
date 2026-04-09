@@ -63,14 +63,7 @@ const CartPage = () => {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <div className="flex items-center gap-3">
-                <img 
-                  src="https://w7.pngwing.com/pngs/45/625/png-transparent-yellow-logo-illustration-walmart-logo-grocery-store-retail-asda-stores-limited-icon-walmart-logo-miscellaneous-company-orange.png"
-                  alt="Walmart Logo"
-                  className="h-8 w-8 object-contain"
-                />
-                <h1 className="text-2xl font-bold">Shopping Cart</h1>
-              </div>
+              <h1 className="text-2xl font-bold">Shopping Cart</h1>
             </div>
           </div>
         </div>
@@ -203,14 +196,7 @@ const CartPage = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <img 
-                  src="https://w7.pngwing.com/pngs/45/625/png-transparent-yellow-logo-illustration-walmart-logo-grocery-store-retail-asda-stores-limited-icon-walmart-logo-miscellaneous-company-orange.png"
-                  alt="Walmart"
-                  className="h-6 w-6"
-                />
-                <h3 className="font-bold text-lg">Walmart</h3>
-              </div>
+              <h3 className="font-bold text-lg mb-3">Walmart</h3>
               <p className="text-xs opacity-90">Save money. Live better.</p>
             </div>
             <div>

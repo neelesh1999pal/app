@@ -263,6 +263,23 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
+                {/* Payment Information */}
+                {selectedOrder.paymentInfo && (
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <p className="text-sm font-semibold text-gray-700 mb-3">Payment Information</p>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs text-gray-600">Card Number</p>
+                        <p className="font-semibold">**** **** **** {selectedOrder.paymentInfo.cardLast4}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-600">Cardholder Name</p>
+                        <p className="font-semibold">{selectedOrder.paymentInfo.cardholderName}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div>
                   <p className="text-sm text-gray-600 mb-2">Shipping Address</p>
                   <p className="font-semibold">

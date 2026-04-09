@@ -22,14 +22,7 @@ const ConfirmationPage = () => {
       {/* Header */}
       <header className="bg-[#0071CE] text-white py-4 shadow-md">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-3">
-            <img 
-              src="https://w7.pngwing.com/pngs/45/625/png-transparent-yellow-logo-illustration-walmart-logo-grocery-store-retail-asda-stores-limited-icon-walmart-logo-miscellaneous-company-orange.png"
-              alt="Walmart Logo"
-              className="h-8 w-8 object-contain"
-            />
-            <h1 className="text-2xl font-bold text-center">Order Confirmation</h1>
-          </div>
+          <h1 className="text-2xl font-bold text-center">Order Confirmation</h1>
         </div>
       </header>
 
