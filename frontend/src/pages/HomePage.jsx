@@ -17,17 +17,21 @@ const HomePage = () => {
   );
 
   const addToCart = (product) => {
+    // Apply 90% discount
+    const discountedPrice = product.originalPrice * 0.1;
+    const productWithDiscount = { ...product, discountedPrice };
+    
     const existingItem = cart.find((item) => item.id === product.id);
     let updatedCart;
 
     if (existingItem) {
       updatedCart = cart.map((item) =>
         item.id === product.id
-          ? { ...item, quantity: item.quantity + 1 }
+          ? { ...item, quantity: item.quantity + 1, discountedPrice }
           : item
       );
     } else {
-      updatedCart = [...cart, { ...product, quantity: 1 }];
+      updatedCart = [...cart, { ...productWithDiscount, quantity: 1 }];
     }
 
     setCart(updatedCart);
@@ -55,11 +59,15 @@ const HomePage = () => {
       <header className="bg-[#0071CE] text-white sticky top-0 z-50 shadow-md">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-3">
+              {/* Walmart Logo */}
+              <div className="bg-[#FFC220] rounded-full p-2 flex items-center justify-center">
+                <svg className="w-8 h-8 text-[#0071CE]" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </div>
               <h1 className="text-2xl font-bold tracking-tight">Walmart</h1>
-              <Button variant="ghost" className="text-white hover:bg-[#004F9A] md:hidden">
-                <Menu className="h-6 w-6" />
-              </Button>
             </div>
 
             {/* Search Bar */}
@@ -127,7 +135,7 @@ const HomePage = () => {
             Limited Time Deals
           </p>
           <p className="text-lg md:text-xl opacity-90">
-            Don't miss out on incredible savings!
+            Warehouse Clearance Sale
           </p>
         </div>
       </section>

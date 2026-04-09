@@ -1,20 +1,25 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Eye } from 'lucide-react';
 
 const ProductCard = ({ product, onAddToCart }) => {
-  const discountPercentage = Math.round(
-    ((product.originalPrice - product.discountedPrice) / product.originalPrice) *
-      100
-  );
+  const navigate = useNavigate();
+  
+  // Calculate 90% discount
+  const discountedPrice = product.originalPrice * 0.1;
+  const savings = product.originalPrice - discountedPrice;
 
   return (
-    <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border-gray-200">
+    <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border-gray-200 cursor-pointer">
       <CardContent className="p-0">
         {/* Image Container */}
-        <div className="relative bg-white aspect-square overflow-hidden">
+        <div 
+          className="relative bg-white aspect-square overflow-hidden"
+          onClick={() => navigate(`/product/${product.id}`)}
+        >
           {product.badge && (
             <Badge
               className="absolute top-2 left-2 z-10 bg-red-600 hover:bg-red-700 text-white"
@@ -22,24 +27,35 @@ const ProductCard = ({ product, onAddToCart }) => {
               {product.badge}
             </Badge>
           )}
-          {discountPercentage > 0 && (
-            <Badge
-              className="absolute top-2 right-2 z-10 bg-[#FFC220] hover:bg-[#FFB800] text-gray-900 font-bold"
-            >
-              {discountPercentage}% OFF
-            </Badge>
-          )}
+          <Badge
+            className="absolute top-2 right-2 z-10 bg-[#FFC220] hover:bg-[#FFB800] text-gray-900 font-bold"
+          >
+            90% OFF
+          </Badge>
           <img
             src={product.image}
             alt={product.name}
             className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-300"
             loading="lazy"
           />
+          {/* View Details Overlay */}
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <Button variant="secondary" className="gap-2">
+              <Eye className="h-4 w-4" />
+              View Details
+            </Button>
+          </div>
         </div>
 
         {/* Product Info */}
         <div className="p-4 bg-white">
-          <h3 className="text-sm font-medium text-gray-900 mb-2 line-clamp-2 min-h-[40px]">
+          {/* Product ID */}
+          <p className="text-xs text-gray-500 mb-1">ID: {product.id.toUpperCase()}</p>
+          
+          <h3 
+            className="text-sm font-medium text-gray-900 mb-2 line-clamp-2 min-h-[40px] cursor-pointer hover:text-[#0071CE]"
+            onClick={() => navigate(`/product/${product.id}`)}
+          >
             {product.name}
           </h3>
 
@@ -47,14 +63,14 @@ const ProductCard = ({ product, onAddToCart }) => {
           <div className="mb-3">
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold text-gray-900">
-                ${product.discountedPrice.toFixed(2)}
+                ${discountedPrice.toFixed(2)}
               </span>
               <span className="text-sm text-gray-500 line-through">
                 ${product.originalPrice.toFixed(2)}
               </span>
             </div>
             <p className="text-xs text-green-600 font-medium mt-1">
-              You save ${(product.originalPrice - product.discountedPrice).toFixed(2)}
+              You save ${savings.toFixed(2)} (90%)
             </p>
           </div>
 
@@ -73,7 +89,10 @@ const ProductCard = ({ product, onAddToCart }) => {
 
           {/* Buy Now Button */}
           <Button
-            onClick={() => onAddToCart(product)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddToCart({...product, discountedPrice});
+            }}
             className="w-full bg-[#0071CE] hover:bg-[#004F9A] text-white font-semibold transition-colors"
           >
             <ShoppingCart className="mr-2 h-4 w-4" />
