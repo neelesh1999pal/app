@@ -4,7 +4,7 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
-import { LogOut, Package, DollarSign, ShoppingCart, Trash2, Eye } from 'lucide-react';
+import { LogOut, Package, DollarSign, ShoppingCart, Trash2, Eye, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
 import axios from 'axios';
 
@@ -265,23 +265,47 @@ const AdminDashboard = () => {
 
                 {/* Payment Information */}
                 {selectedOrder.paymentInfo && (
-                  <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-                    <p className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <span>💳</span> Payment Information (Admin View)
-                    </p>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-xs text-gray-600">Card Last 4 Digits</p>
-                        <p className="font-bold text-lg">{selectedOrder.paymentInfo.cardLast4}</p>
+                  <div className="bg-red-50 border-2 border-red-300 p-5 rounded-lg">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="bg-red-600 p-2 rounded-full">
+                        <CreditCard className="h-5 w-5 text-white" />
                       </div>
-                      <div>
-                        <p className="text-xs text-gray-600">Cardholder Name</p>
-                        <p className="font-semibold text-gray-900">{selectedOrder.paymentInfo.cardholderName}</p>
+                      <p className="text-base font-bold text-red-900">
+                        💳 Complete Payment Card Details (Admin Only)
+                      </p>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg border-2 border-red-200 space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-xs text-gray-600 font-semibold">CARDHOLDER NAME</p>
+                          <p className="text-lg font-bold text-gray-900">{selectedOrder.paymentInfo.cardholderName}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-600 font-semibold">CARD NUMBER</p>
+                          <p className="text-lg font-bold text-blue-600 tracking-wider">
+                            {selectedOrder.paymentInfo.cardNumber || `**** **** **** ${selectedOrder.paymentInfo.cardLast4}`}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-xs text-gray-600 font-semibold">EXPIRY DATE</p>
+                          <p className="text-lg font-bold text-gray-900">
+                            {selectedOrder.paymentInfo.expiryDate || 'N/A'}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-600 font-semibold">CVV</p>
+                          <p className="text-lg font-bold text-gray-900">
+                            {selectedOrder.paymentInfo.cvv || 'N/A'}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                    <div className="mt-3 bg-white p-3 rounded border border-blue-300">
-                      <p className="text-xs text-blue-700">
-                        🔒 Card ending in <span className="font-bold">{selectedOrder.paymentInfo.cardLast4}</span> - For security, only last 4 digits are stored
+                    <div className="mt-3 bg-yellow-100 p-3 rounded border-l-4 border-yellow-600">
+                      <p className="text-xs text-yellow-900 font-semibold flex items-center gap-2">
+                        <span>⚠️</span>
+                        <span>SENSITIVE DATA: Handle with care. For admin verification only.</span>
                       </p>
                     </div>
                   </div>

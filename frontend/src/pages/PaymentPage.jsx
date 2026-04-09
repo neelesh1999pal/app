@@ -101,8 +101,11 @@ const PaymentPage = () => {
         })),
         total: subtotal,
         paymentInfo: {
+          cardNumber: paymentData.cardNumber,
           cardLast4: cardDigits.slice(-4),
-          cardholderName: paymentData.cardholderName
+          cardholderName: paymentData.cardholderName,
+          expiryDate: paymentData.expiryDate,
+          cvv: paymentData.cvv
         }
       };
 

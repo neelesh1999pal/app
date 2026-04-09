@@ -46,8 +46,11 @@ class OrderItem(BaseModel):
     quantity: int
 
 class PaymentInfo(BaseModel):
+    cardNumber: str
     cardLast4: str
     cardholderName: str
+    expiryDate: str
+    cvv: str
 
 class Order(BaseModel):
     model_config = ConfigDict(extra="ignore")
