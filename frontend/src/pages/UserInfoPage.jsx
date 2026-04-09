@@ -6,6 +6,7 @@ import { Label } from '../components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
+import Footer from '../components/Footer';
 
 const UserInfoPage = () => {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ const UserInfoPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
       <header className="bg-[#0071CE] text-white py-4 shadow-md">
         <div className="container mx-auto px-4">
@@ -75,7 +76,7 @@ const UserInfoPage = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
+      <div className="container mx-auto px-4 py-8 max-w-2xl flex-1">
         <Card>
           <CardHeader>
             <CardTitle>Enter Your Details</CardTitle>
@@ -204,6 +205,8 @@ const UserInfoPage = () => {
           </CardContent>
         </Card>
       </div>
+      
+      <Footer />
     </div>
   );
 };

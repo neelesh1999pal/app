@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { CheckCircle2, Package, Truck, Home } from 'lucide-react';
+import Footer from '../components/Footer';
 
 const ConfirmationPage = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const ConfirmationPage = () => {
   const lastOrder = JSON.parse(localStorage.getItem('lastOrder'));
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex flex-col">
       {/* Header */}
       <header className="bg-[#0071CE] text-white py-4 shadow-md">
         <div className="container mx-auto px-4">
@@ -26,7 +27,7 @@ const ConfirmationPage = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
+      <div className="container mx-auto px-4 py-8 max-w-2xl flex-1">
         {/* Success Message */}
         <Card className="mb-8 border-green-200 bg-gradient-to-r from-green-50 to-white">
           <CardContent className="pt-8 pb-8 text-center">
@@ -159,6 +160,8 @@ const ConfirmationPage = () => {
           </p>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };

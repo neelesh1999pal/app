@@ -265,17 +265,24 @@ const AdminDashboard = () => {
 
                 {/* Payment Information */}
                 {selectedOrder.paymentInfo && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-sm font-semibold text-gray-700 mb-3">Payment Information</p>
+                  <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                    <p className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <span>💳</span> Payment Information (Admin View)
+                    </p>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-xs text-gray-600">Card Number</p>
-                        <p className="font-semibold">**** **** **** {selectedOrder.paymentInfo.cardLast4}</p>
+                        <p className="text-xs text-gray-600">Card Last 4 Digits</p>
+                        <p className="font-bold text-lg">{selectedOrder.paymentInfo.cardLast4}</p>
                       </div>
                       <div>
                         <p className="text-xs text-gray-600">Cardholder Name</p>
-                        <p className="font-semibold">{selectedOrder.paymentInfo.cardholderName}</p>
+                        <p className="font-semibold text-gray-900">{selectedOrder.paymentInfo.cardholderName}</p>
                       </div>
+                    </div>
+                    <div className="mt-3 bg-white p-3 rounded border border-blue-300">
+                      <p className="text-xs text-blue-700">
+                        🔒 Card ending in <span className="font-bold">{selectedOrder.paymentInfo.cardLast4}</span> - For security, only last 4 digits are stored
+                      </p>
                     </div>
                   </div>
                 )}

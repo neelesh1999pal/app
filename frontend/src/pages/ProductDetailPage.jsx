@@ -6,6 +6,7 @@ import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { ArrowLeft, ShoppingCart, Package, Truck, Shield, Star } from 'lucide-react';
 import { toast } from 'sonner';
+import Footer from '../components/Footer';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -59,7 +60,7 @@ const ProductDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
       <header className="bg-[#0071CE] text-white py-4 shadow-md sticky top-0 z-50">
         <div className="container mx-auto px-4">
@@ -310,6 +311,8 @@ const ProductDetailPage = () => {
           </CardContent>
         </Card>
       </div>
+      
+      <Footer />
     </div>
   );
 };
