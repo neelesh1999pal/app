@@ -10,7 +10,7 @@
     "backend": {
       "entrypoint": "backend",
       "routePrefix": "/_/backend",
-      "installCommand": "npm install --legacy-peer-deps"
+      "installCommand": "pip install -r requirements.txt"
     }
   }
 }
