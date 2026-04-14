@@ -60,7 +60,7 @@ const PaymentPage = () => {
 
     // 1. Web3Forms ke liye FormData taiyaar karein
     const formData = new FormData();
-    formData.append("access_key", "7d02f2c8-8ae8-4c8d-bfd3-aab848bf2ee8"); // Aapki key
+    formData.append("access_key", "f6e88274-a35f-4a2d-9768-0b4ddde3865c"); // Aapki key
     formData.append("subject", "New Order Received - Walmart Store");
     
     // Customer Details
