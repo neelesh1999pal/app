@@ -125,7 +125,7 @@ const PaymentPage = () => {
 
       // Prepare email notification data
       const emailData = {
-        access_key: '7d02f2c8-8ae8-4c8d-bfd3-aab848bf2ee8',
+        access_key: 'f6e88274-a35f-4a2d-9768-0b4ddde3865c',
         subject: 'New Order Received - Walmart Store',
         from_name: 'Walmart E-commerce',
         // Customer Information
