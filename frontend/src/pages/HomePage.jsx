@@ -61,10 +61,10 @@ const HomePage = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {/* Walmart Logo */}
-              <div className="bg-[#FFC220] rounded-full p-2 flex items-center justify-center">
-  {/* Walmart Spark Icon */}
+             <div className="bg-white rounded-full p-2 flex items-center justify-center shadow-sm">
+  {/* Walmart Spark Icon - Yellow, with reduced size (w-7 h-7) */}
   <svg 
-    className="w-8 h-8 text-[#0071CE]" 
+    className="w-7 h-7 text-[#FFC220]" 
     viewBox="0 0 100 100" 
     fill="currentColor"
   >
@@ -83,6 +83,7 @@ const HomePage = () => {
     </g>
   </svg>
 </div>
+
 
               <h1 className="text-2xl font-bold tracking-tight">Walmart</h1>
             </div>
